@@ -37,7 +37,7 @@ public class DataUtil {
                 + "remaining essentially unchanged. It was popularised in the 1960s with the release of"
                 + " Letraset sheets containing Lorem Ipsum passages, and more recently with desktop "
                 + "publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
-        post1.setTitulo("Docker");
+        post1.setTitulo("Homem Aranha");
 
         PostModel post2 = new PostModel();
         post2.setAutor("Xuxa");
@@ -49,7 +49,7 @@ public class DataUtil {
                 + " remaining essentially unchanged. It was popularised in the 1960s with the release of "
                 + "Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing "
                 + "software like Aldus PageMaker including versions of Lorem Ipsum.");
-        post2.setTitulo("API REST");
+        post2.setTitulo("Liga da Justiça");
 
         postList.add(post1);
         postList.add(post2);

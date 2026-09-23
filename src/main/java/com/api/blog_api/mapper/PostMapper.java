@@ -1,8 +1,8 @@
 package com.api.blog_api.mapper;
 
 import com.api.blog_api.model.PostModel;
-import com.api.blog_api.request.PostRequestDto;
-import com.api.blog_api.response.PostResponseDto;
+import com.api.blog_api.dto.request.PostRequestDto;
+import com.api.blog_api.dto.response.PostResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component

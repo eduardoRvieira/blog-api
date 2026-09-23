@@ -3,8 +3,8 @@ package com.api.blog_api.service;
 import com.api.blog_api.mapper.PostMapper;
 import com.api.blog_api.model.PostModel;
 import com.api.blog_api.repository.PostRepository;
-import com.api.blog_api.request.PostRequestDto;
-import com.api.blog_api.response.PostResponseDto;
+import com.api.blog_api.dto.request.PostRequestDto;
+import com.api.blog_api.dto.response.PostResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

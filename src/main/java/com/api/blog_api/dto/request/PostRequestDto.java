@@ -1,4 +1,4 @@
-package com.api.blog_api.request;
+package com.api.blog_api.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

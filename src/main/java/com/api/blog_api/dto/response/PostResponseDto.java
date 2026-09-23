@@ -1,7 +1,4 @@
-package com.api.blog_api.response;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+package com.api.blog_api.dto.response;
 
 import java.time.LocalDate;
 import java.util.UUID;
