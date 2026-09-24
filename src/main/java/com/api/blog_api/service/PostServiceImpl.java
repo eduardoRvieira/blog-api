@@ -1,7 +1,12 @@
 package com.api.blog_api.service;
 
+import com.api.blog_api.dto.request.ComentarioRequestDto;
+import com.api.blog_api.dto.response.ComentarioResponseDto;
+import com.api.blog_api.mapper.ComentarioMapper;
 import com.api.blog_api.mapper.PostMapper;
+import com.api.blog_api.model.ComentarioModel;
 import com.api.blog_api.model.PostModel;
+import com.api.blog_api.repository.ComentarioRepository;
 import com.api.blog_api.repository.PostRepository;
 import com.api.blog_api.dto.request.PostRequestDto;
 import com.api.blog_api.dto.response.PostResponseDto;
@@ -17,10 +22,14 @@ import java.util.UUID;
 public class PostServiceImpl implements PostService{
     private final PostRepository postRepository;
     private final PostMapper postMapper;
+    private final ComentarioRepository comentarioRepository;
+    private final ComentarioMapper comentarioMapper;
 
-    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper){
+    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper, ComentarioRepository comentarioRepository, ComentarioMapper comentarioMapper){
         this.postRepository = postRepository;
         this.postMapper = postMapper;
+        this.comentarioRepository = comentarioRepository;
+        this.comentarioMapper = comentarioMapper;
     }
 
     @Override
@@ -54,5 +63,16 @@ public class PostServiceImpl implements PostService{
         PostModel post = postMapper.toEntity(dto);
         PostModel saved = postRepository.save(post);
         return postMapper.toDto(saved);
+    }
+
+    @Override
+    @Transactional
+    public ComentarioResponseDto addComentario(UUID postId, ComentarioRequestDto dto){
+        Optional<PostModel> optionalPost = postRepository.findById(postId);
+        PostModel post = optionalPost.get();
+        ComentarioModel comentario = new ComentarioModel(dto.comentario(), post);
+        post.adicionarComentario(comentario);
+        ComentarioModel saved = comentarioRepository.save(comentario);
+        return comentarioMapper.toDto(saved);
     }
 }
