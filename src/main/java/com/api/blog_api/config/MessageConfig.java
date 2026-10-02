@@ -24,7 +24,7 @@ public class MessageConfig {
         // de mensagens dentro do projeto.
         //
         // O Spring irá procurar arquivos como:
-        // messages.properties
+        // messagesOLD.properties
         // messages_en.properties
         // messages_es.properties
         source.setBasename("classpath:messages");
