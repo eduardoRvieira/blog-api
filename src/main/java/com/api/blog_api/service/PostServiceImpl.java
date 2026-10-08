@@ -50,12 +50,12 @@ public class PostServiceImpl implements PostService{
     @Transactional(readOnly = true)
     public Page<PostResponseDto> findAll(Pageable pageable){
 
-        Page<PostModel> posts = PostRepository.findAll(pageable);
+        Page<PostModel> posts = postRepository.findAll(pageable);
 
         return posts.map(post -> {
             PostResponseDto dto = postMapper.toDto(post);
             return dto;
-        })
+        });
     }
 
     @Override
