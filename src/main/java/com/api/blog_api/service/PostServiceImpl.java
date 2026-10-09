@@ -11,6 +11,7 @@ import com.api.blog_api.repository.PostRepository;
 import com.api.blog_api.dto.request.PostRequestDto;
 import com.api.blog_api.dto.response.PostResponseDto;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +57,26 @@ public class PostServiceImpl implements PostService{
             PostResponseDto dto = postMapper.toDto(post);
             return dto;
         });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto> findAll(Pageable pageable, String titulo){
+
+        Page<PostModel> posts;
+        if (titulo == null || titulo.isBlank()){
+            posts = postRepository.findAll(pageable);
+        } else {
+            posts = postRepository.findByTituloContainingIgnoreCase(titulo, pageable);
+        }
+
+        List<PostResponseDto> response = new ArrayList<>();
+        for (PostModel post : posts.getContent()){
+            PostResponseDto dto = postMapper.toDto(post);
+            response.add(dto);
+        }
+
+        return new PageImpl<>(response, pageable, posts.getTotalElements());
     }
 
     @Override
