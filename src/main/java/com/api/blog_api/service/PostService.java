@@ -19,4 +19,6 @@ public interface PostService {
     ComentarioResponseDto addComentario(UUID postId, ComentarioRequestDto dto);
     void deletePost(UUID id);
     PostResponseDto updatePost(UUID id, PostRequestDto dto);
+    void deleteComentario(UUID id);
+    ComentarioResponseDto updateComentario(UUID id, ComentarioRequestDto dto);
 }

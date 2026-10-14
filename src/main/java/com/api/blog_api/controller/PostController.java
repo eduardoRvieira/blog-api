@@ -82,4 +82,20 @@ public class PostController {
         PostResponseDto updatedPost = postService.updatePost(id, dto);
         return ResponseEntity.ok(updatedPost);
     }
+
+    @Operation(summary = "Atualiza comentário pelo ID")
+    @PutMapping("/comentarios/{comentarioId")
+    public ResponseEntity<ComentarioResponseDto> updateComentario(@PathVariable UUID comentarioId, @RequestBody @Valid ComentarioRequestDto dto){
+        ComentarioResponseDto updated = postService.updateComentario(comentarioId, dto);
+
+        return ResponseEntity.ok(updated);
+    }
+
+    @Operation(summary = "Deleta comentário pelo ID")
+    @DeleteMapping("/comentarios/{comentarioId}")
+    public ResponseEntity<Void> deleteComentario(@PathVariable UUID comentarioId){
+        postService.deleteComentario(comentarioId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

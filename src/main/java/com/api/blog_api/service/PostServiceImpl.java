@@ -135,4 +135,27 @@ public class PostServiceImpl implements PostService{
 
         return postMapper.toDto(updatedPost);
     }
+
+    @Override
+    @Transactional
+    public ComentarioResponseDto updateComentario(UUID comentarioId, ComentarioRequestDto dto){
+        ComentarioModel comentario = comentarioRepository.findById(comentarioId)
+                .orElseThrow(() -> new RuntimeException("Comentário não encontrado com o ID: " + comentarioId));
+
+        comentario.setComentario(dto.comentario());
+
+        ComentarioModel updated = comentarioRepository.save(comentario);
+
+        return comentarioMapper.toDto(updated);
+    }
+
+    @Override
+    @Transactional
+    public void deleteComentario(UUID comentarioId){
+        if (!comentarioRepository.existsById(comentarioId)){
+            throw new RuntimeException("Comentário não encontrado com o ID: " + comentarioId);
+        }
+
+        comentarioRepository.deleteById(comentarioId);
+    }
 }
