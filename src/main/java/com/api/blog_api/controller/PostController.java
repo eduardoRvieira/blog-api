@@ -8,6 +8,7 @@ import com.api.blog_api.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -66,5 +67,19 @@ public class PostController {
             @PathVariable UUID postId,
             @RequestBody @Valid ComentarioRequestDto dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(postService.addComentario(postId, dto));
+    }
+
+    @Operation(summary = "Deleta post pelo ID")
+    @DeleteMapping("/posts/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable UUID id){
+        postService.deletePost(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Atualiza post pelo ID ")
+    @PutMapping("/posts/{id}")
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable UUID id, PostRequestDto dto){
+        PostResponseDto updatedPost = postService.updatePost(id, dto);
+        return ResponseEntity.ok(updatedPost);
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -109,5 +110,30 @@ public class PostServiceImpl implements PostService{
         post.adicionarComentario(comentario);
         ComentarioModel saved = comentarioRepository.save(comentario);
         return comentarioMapper.toDto(saved);
+    }
+
+    @Override
+    @Transactional
+    public void deletePost(UUID id){
+        if (!postRepository.existsById(id)){
+            throw new RuntimeException("Post não encontrado com o ID: " + id);
+        }
+        postRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public PostResponseDto updatePost(UUID id, PostRequestDto dto){
+        PostModel post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post não encontrado com o ID: " + id));
+
+        post.setTitulo(dto.titulo());
+        post.setAutor(dto.autor());
+        post.setData(LocalDate.now());
+        post.setTexto(dto.texto());
+
+        PostModel updatedPost = postRepository.save(post);
+
+        return postMapper.toDto(updatedPost);
     }
 }
