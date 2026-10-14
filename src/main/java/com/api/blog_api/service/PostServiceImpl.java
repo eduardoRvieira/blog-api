@@ -129,7 +129,6 @@ public class PostServiceImpl implements PostService{
 
         post.setTitulo(dto.titulo());
         post.setAutor(dto.autor());
-        post.setData(LocalDate.now());
         post.setTexto(dto.texto());
 
         PostModel updatedPost = postRepository.save(post);
