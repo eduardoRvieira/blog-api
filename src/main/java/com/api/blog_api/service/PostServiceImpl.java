@@ -2,6 +2,7 @@ package com.api.blog_api.service;
 
 import com.api.blog_api.dto.request.ComentarioRequestDto;
 import com.api.blog_api.dto.response.ComentarioResponseDto;
+import com.api.blog_api.exception.PostNaoEncontradoException;
 import com.api.blog_api.mapper.ComentarioMapper;
 import com.api.blog_api.mapper.PostMapper;
 import com.api.blog_api.model.ComentarioModel;
@@ -28,12 +29,14 @@ public class PostServiceImpl implements PostService{
     private final PostMapper postMapper;
     private final ComentarioRepository comentarioRepository;
     private final ComentarioMapper comentarioMapper;
+    private final MessageService messageService;
 
-    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper, ComentarioRepository comentarioRepository, ComentarioMapper comentarioMapper){
+    public PostServiceImpl(PostRepository postRepository, PostMapper postMapper, ComentarioRepository comentarioRepository, ComentarioMapper comentarioMapper, MessageService messageService){
         this.postRepository = postRepository;
         this.postMapper = postMapper;
         this.comentarioRepository = comentarioRepository;
         this.comentarioMapper = comentarioMapper;
+        this.messageService = messageService;
     }
 
     /*@Override
@@ -71,11 +74,13 @@ public class PostServiceImpl implements PostService{
             posts = postRepository.findByTituloContainingIgnoreCase(titulo, pageable);
         }
 
-        List<PostResponseDto> response = new ArrayList<>();
-        for (PostModel post : posts.getContent()){
+        /*List<PostResponseDto> response = new ArrayList<>();*/
+        /*for (PostModel post : posts.getContent()){
             PostResponseDto dto = postMapper.toDto(post);
             response.add(dto);
-        }
+        }*/
+
+        List<PostResponseDto> response = posts.getContent().stream().map(postMapper::toDto).toList();
 
         return new PageImpl<>(response, pageable, posts.getTotalElements());
     }
@@ -83,13 +88,18 @@ public class PostServiceImpl implements PostService{
     @Override
     @Transactional(readOnly = true)
     public PostResponseDto findById(UUID id){
-        Optional<PostModel> optionalPost = postRepository.findById(id);
+        /*Optional<PostModel> optionalPost = postRepository.findById(id);
 
         if (optionalPost.isEmpty()){
             throw new RuntimeException(("Post não encontrado com o ID: " + id));
         }
 
         PostModel post = optionalPost.get();
+        return postMapper.toDto(post);*/
+
+        PostModel post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post não encontrado com o ID: " + id));
+
         return postMapper.toDto(post);
     }
 
@@ -116,7 +126,7 @@ public class PostServiceImpl implements PostService{
     @Transactional
     public void deletePost(UUID id){
         if (!postRepository.existsById(id)){
-            throw new RuntimeException("Post não encontrado com o ID: " + id);
+            throw new RuntimeException(messageService.getMessage("post.not.found", id));
         }
         postRepository.deleteById(id);
     }
@@ -125,7 +135,7 @@ public class PostServiceImpl implements PostService{
     @Transactional
     public PostResponseDto updatePost(UUID id, PostRequestDto dto){
         PostModel post = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post não encontrado com o ID: " + id));
+                .orElseThrow(() -> new PostNaoEncontradoException(messageService.getMessage("post.not.found", id)));
 
         post.setTitulo(dto.titulo());
         post.setAutor(dto.autor());
@@ -140,7 +150,7 @@ public class PostServiceImpl implements PostService{
     @Transactional
     public ComentarioResponseDto updateComentario(UUID comentarioId, ComentarioRequestDto dto){
         ComentarioModel comentario = comentarioRepository.findById(comentarioId)
-                .orElseThrow(() -> new RuntimeException("Comentário não encontrado com o ID: " + comentarioId));
+                .orElseThrow(() -> new RuntimeException(messageService.getMessage("comentario.not.found", comentarioId)));
 
         comentario.setComentario(dto.comentario());
 
