@@ -50,14 +50,14 @@ public class PostController {
     }
 
     @Operation(summary = "Cria post")
-    @PostMapping("/posts") // Padronizado para o plural do recurso
+    @PostMapping("/posts")
     public ResponseEntity<PostResponseDto> createPost(@RequestBody @Valid PostRequestDto dto) {
         PostResponseDto created = postService.createPost(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @Operation(summary = "Adiciona comentário em post pela ID")
-    @PostMapping("/posts/{postId}/comentarios") // Padronizado como sub-recurso (RESTful)
+    @PostMapping("/posts/{postId}/comentarios")
     public ResponseEntity<ComentarioResponseDto> createComentario(
             @PathVariable UUID postId,
             @RequestBody @Valid ComentarioRequestDto dto) {
@@ -65,14 +65,14 @@ public class PostController {
     }
 
     @Operation(summary = "Deleta post pelo ID")
-    @DeleteMapping("/posts/{id}") // Removido o verbo da URL
+    @DeleteMapping("/posts/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable UUID id) {
         postService.deletePost(id);
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Atualiza post pelo ID")
-    @PutMapping("/posts/{id}") // ERRO CORRIGIDO: Adicionado @RequestBody e @Valid
+    @PutMapping("/posts/{id}") 
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable UUID id, @RequestBody @Valid PostRequestDto dto) {
         PostResponseDto updatedPost = postService.updatePost(id, dto);
         return ResponseEntity.ok(updatedPost);
