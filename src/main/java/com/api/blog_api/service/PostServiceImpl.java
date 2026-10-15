@@ -2,6 +2,7 @@ package com.api.blog_api.service;
 
 import com.api.blog_api.dto.request.ComentarioRequestDto;
 import com.api.blog_api.dto.response.ComentarioResponseDto;
+import com.api.blog_api.exception.ComentarioNaoEncontradoException;
 import com.api.blog_api.exception.PostNaoEncontradoException;
 import com.api.blog_api.mapper.ComentarioMapper;
 import com.api.blog_api.mapper.PostMapper;
@@ -98,7 +99,7 @@ public class PostServiceImpl implements PostService{
         return postMapper.toDto(post);*/
 
         PostModel post = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Post não encontrado com o ID: " + id));
+                .orElseThrow(() -> new PostNaoEncontradoException(messageService.getMessage("post.not.found", id)));
 
         return postMapper.toDto(post);
     }
@@ -114,8 +115,8 @@ public class PostServiceImpl implements PostService{
     @Override
     @Transactional
     public ComentarioResponseDto addComentario(UUID postId, ComentarioRequestDto dto){
-        Optional<PostModel> optionalPost = postRepository.findById(postId);
-        PostModel post = optionalPost.get();
+        PostModel post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNaoEncontradoException(messageService.getMessage("post.not.found", postId)));
         ComentarioModel comentario = new ComentarioModel(dto.comentario(), post);
         post.adicionarComentario(comentario);
         ComentarioModel saved = comentarioRepository.save(comentario);
@@ -126,7 +127,7 @@ public class PostServiceImpl implements PostService{
     @Transactional
     public void deletePost(UUID id){
         if (!postRepository.existsById(id)){
-            throw new RuntimeException(messageService.getMessage("post.not.found", id));
+            throw new PostNaoEncontradoException(messageService.getMessage("post.not.found", id));
         }
         postRepository.deleteById(id);
     }
@@ -150,7 +151,7 @@ public class PostServiceImpl implements PostService{
     @Transactional
     public ComentarioResponseDto updateComentario(UUID comentarioId, ComentarioRequestDto dto){
         ComentarioModel comentario = comentarioRepository.findById(comentarioId)
-                .orElseThrow(() -> new RuntimeException(messageService.getMessage("comentario.not.found", comentarioId)));
+                .orElseThrow(() -> new ComentarioNaoEncontradoException(messageService.getMessage("comentario.not.found", comentarioId)));
 
         comentario.setComentario(dto.comentario());
 
@@ -163,7 +164,7 @@ public class PostServiceImpl implements PostService{
     @Transactional
     public void deleteComentario(UUID comentarioId){
         if (!comentarioRepository.existsById(comentarioId)){
-            throw new RuntimeException("Comentário não encontrado com o ID: " + comentarioId);
+            throw new ComentarioNaoEncontradoException(messageService.getMessage("comentario.not.found", comentarioId));
         }
 
         comentarioRepository.deleteById(comentarioId);
