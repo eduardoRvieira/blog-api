@@ -84,7 +84,7 @@ public class PostController {
     }
 
     @Operation(summary = "Atualiza comentário pelo ID")
-    @PutMapping("/comentarios/{comentarioId")
+    @PutMapping("/comentarios/{comentarioId}")
     public ResponseEntity<ComentarioResponseDto> updateComentario(@PathVariable UUID comentarioId, @RequestBody @Valid ComentarioRequestDto dto){
         ComentarioResponseDto updated = postService.updateComentario(comentarioId, dto);
 
