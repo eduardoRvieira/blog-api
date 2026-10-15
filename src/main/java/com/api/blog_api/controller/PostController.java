@@ -72,7 +72,7 @@ public class PostController {
     }
 
     @Operation(summary = "Atualiza post pelo ID")
-    @PutMapping("/posts/{id}") 
+    @PutMapping("/posts/{id}")
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable UUID id, @RequestBody @Valid PostRequestDto dto) {
         PostResponseDto updatedPost = postService.updatePost(id, dto);
         return ResponseEntity.ok(updatedPost);
