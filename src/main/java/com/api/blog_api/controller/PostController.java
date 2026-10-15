@@ -88,7 +88,7 @@ public class PostController {
     }
 
     @Operation(summary = "Deleta comentário pelo ID")
-    @DeleteMapping("/comentarios/{comentarioId}") 
+    @DeleteMapping("/comentarios/{comentarioId}")
     public ResponseEntity<Void> deleteComentario(@PathVariable UUID comentarioId) {
         postService.deleteComentario(comentarioId);
         return ResponseEntity.noContent().build();
