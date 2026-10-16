@@ -16,8 +16,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET,
                                 "/api/posts",
                                 "/api/posts/{id}").permitAll()
-                )
-                .build();
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/newpost").permitAll()
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/posts/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/posts/{id}").hasRole("ADMIN")
+                ).build();
     }
 
 }
