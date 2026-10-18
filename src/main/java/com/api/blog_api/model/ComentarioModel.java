@@ -19,7 +19,6 @@ public class ComentarioModel {
     @Column(nullable = false)
     private LocalDate data;
 
-    @Lob
     @Column(columnDefinition = "TEXT", nullable = false)
     private String comentario;
 
