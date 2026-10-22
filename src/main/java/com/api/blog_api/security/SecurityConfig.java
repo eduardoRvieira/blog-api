@@ -39,7 +39,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder){
         UserDetails admin = User.builder()
                 .username("admin")
@@ -54,6 +54,8 @@ public class SecurityConfig {
                 .build();
 
         return new InMemoryUserDetailsManager(admin, user);
-    }
+    }*/
+
+
 
 }
